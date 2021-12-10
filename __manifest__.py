@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Nusantech Material",
-
     'summary': "Nusantech Material Module",
-
-    'description': """
-        Long description of module's purpose
-    """,
+    'description': "Nusantech Backend Developer Test Module",
 
     'author': "Fajar Ardiansyah",
     'website': "http://www.fardiansyah.com",
