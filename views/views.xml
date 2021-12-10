@@ -1,0 +1,99 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="ns_material.list">
+      <field name="name">ns_material.list</field>
+      <field name="model">ns_material.material</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="material_code"/>
+          <field name="material_name"/>
+          <field name="material_type"/>
+          <field name="material_buy_price" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+          <field name="currency_id" invisible="1"/> 
+          <field name="related_supplier_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="ns_material.form">
+        <field name="name">ns_material.form</field>
+        <field name="model">ns_material.material</field>
+        <field name="arch" type="xml">
+            <form string="Data Material">
+              <sheet>
+                <group>
+                  <group>
+                      <field name="material_code"/>
+                      <field name="material_name"/>
+                      <field name="material_type"/>
+                      <field name="related_supplier_id"/>
+                  </group>
+                  <group>
+                      <field name="material_buy_price" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                      <field name="currency_id"/>
+                  </group>
+                </group>
+              </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ns_material.search">                                
+      <field name="name">ns_material.search</field>                                
+      <field name="model">ns_material.material</field>                                
+      <field name="arch" type="xml">                                    
+        <search string="Search Material">                                        
+          <field name="material_type"></field>                                        
+          <filter string="Fabric" domain="[('material_type','=', 'F')]" name="material_type_fabric"></filter>                                        
+          <filter string="Jeans" domain="[('material_type','=', 'J')]" name="material_type_jeans"></filter>                                        
+          <filter string="Cotton" domain="[('material_type','=', 'C')]" name="material_type_cotton"></filter>                                        
+          <group expand="0" string="Group By">                                            
+            <filter string="Related Supplier" name="related_supplier_id" context="{'group_by': 'related_supplier_id'}"></filter>                                       
+          </group>                                    
+        </search>                                
+      </field>                            
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="ns_material.action_window">
+      <field name="name">Material</field>
+      <field name="res_model">ns_material.material</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+
+    <record model="ir.actions.server" id="ns_material.action_server">
+      <field name="name">ns_material server</field>
+      <field name="model_id" ref="model_ns_material_material"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="Material" id="ns_material.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Material" id="ns_material.menu_materials" parent="ns_material.menu_root"/>
+  
+
+    <!-- actions -->
+    <menuitem name="Material" id="ns_material.menu_materials_list" parent="ns_material.menu_materials"
+              action="ns_material.action_window"/>
+
+  </data>
+</odoo>
