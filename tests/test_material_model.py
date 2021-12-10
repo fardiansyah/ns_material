@@ -1,5 +1,5 @@
-from odoo.tests.common import SavepointCase, TransactionCase
-from odoo.exceptions import UserError
+from odoo.tests.common import TransactionCase
+from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 
 @tagged('post_install', '-at_install', 'ns_material')
