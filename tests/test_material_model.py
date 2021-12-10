@@ -1,31 +1,31 @@
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 
 @tagged('post_install', '-at_install', 'ns_material')
-class NusantechMaterialTestCase(TransactionCase):
+class NusantechMaterialTestCase(SavepointCase):
 
     @classmethod
-    def setUpClass(self):
-        # add env on cls and many other things
-        super(NusantechMaterialTestCase, cls).setUpClass()
+    def setUpClass(cls):
+        super(NusantechMaterialTestCase,cls).setUpClass()
 
         related_supplier_vals = {
             'name': 'Test Supplier',
             'is_company': True,
             'email': 'test@test.com',
         }
-        self.related_supplier_id = self.env['res.partner'].create(partner_vals)
-        self.currency_id = self.env['res.currency'].search([('name','=','IDR')]).id
+        cls.related_supplier_id = cls.env['res.partner'].create(related_supplier_vals).id
+        #cls.currency_id = cls.env['res.currency'].search([('name','=','IDR')]).id
+        cls.currency_id = 1
         material_vals = {
             'material_code' : "C999",
             'material_name': "Cotton Grade 999",
             'material_type': "C",
             'material_buy_price': "100000",
-            'currency_id': self.currency_id,
-            'related_supplier_id': self.related_supplier_id,
+            'currency_id': cls.currency_id,
+            'related_supplier_id': cls.related_supplier_id,
         }
-        self.material = self.env['ns_material.material'].create(material_vals)
+        cls.material = cls.env['ns_material.material'].create(material_vals)
         
 
     def test_material_created_on_create(self):
@@ -86,7 +86,6 @@ class NusantechMaterialTestCase(TransactionCase):
                     'related_supplier_id': self.related_supplier_id,
                 }
             )
-            material.flush()
     
     def test_material_update_invalid_buy_price_raise(self):
         # TEST CASE
@@ -99,14 +98,4 @@ class NusantechMaterialTestCase(TransactionCase):
             ValidationError,
             msg="Field Material Buy Price can't be less than 100",
         ):
-            material = self.env["ns_material.material"].write(
-                {
-                    'material_code' : "C999",
-                    'material_name': "Cotton Grade 999",
-                    'material_type': "C",
-                    'material_buy_price': "50",
-                    'currency_id': self.currency_id,
-                    'related_supplier_id': self.related_supplier_id,
-                }
-            )
-            material.flush()
+            self.material.update({'material_buy_price': "50"})
