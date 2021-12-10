@@ -6,7 +6,7 @@ from odoo.exceptions import AccessError, UserError, ValidationError
 
 class NusantechMaterial(models.Model):
     _name = 'ns_material.material'
-
+    _description = 'Material Model'
     _sql_constraints = [
 
         ('ns_material_material_code_uniq', 'unique (material_code)', "Code already exists!"),
